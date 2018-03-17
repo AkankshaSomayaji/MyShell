@@ -1,5 +1,6 @@
 username = $(shell whoami)
-files = main.c tokens.c
+SRCDIR = src
+files = $(SRCDIR)/main.c $(SRCDIR)/tokens.c
 opflag = -o shell
 
 all: run
@@ -9,4 +10,3 @@ run: compile
 
 compile:
 	gcc -Wall -g $(files) $(opflag)
-
