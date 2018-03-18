@@ -43,7 +43,6 @@ void prompt(){
     int i = 0, j = 0;
     gethostname(hostname, sizeof(hostname));
     getcwd(cwd, 1024);
-    printf("%s\n", getcwd(cwd, 1024));
     for(i = strlen(cwd) - 1; i > 0; i--){
         if(cwd[i] == '/'){
             cwd_dir[j] = '\0';
