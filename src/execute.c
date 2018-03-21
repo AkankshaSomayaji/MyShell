@@ -18,7 +18,7 @@ void execute(int num)
 			arg[j] = (char *)malloc(sizeof(char) * (strlen(cmd_table[i].cmdtkns[j]) + 1));
 			strcpy(arg[j],cmd_table[i].cmdtkns[j]);	
 		}
-		arg = (char **)realloc(arg,sizeof(char *) * (j));
+		arg = (char **)realloc(arg,sizeof(char *) * (j+1));
 		arg[j] = NULL;
 
 		if(strcmp(arg[0], "cd") == 0){
