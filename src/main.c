@@ -23,7 +23,7 @@ int main(int argc, char ** argv, char ** envp){
         else{
             tokenize(input, &tokens, &num_tokens);
         }
-        if(strcmp(tokens[0], "end") == 0){
+        if(strcmp(tokens[0], "exit") == 0){
             return 0;
         }
         //print_tokens(tokens, num_tokens);
