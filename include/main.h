@@ -15,7 +15,7 @@
 #include <fcntl.h>
 #include <termios.h> 
 #include "tokens.h"
-//#include "execute.h"
+#include "execute.h"
 
 /* ------------------------------- Macros -------------------------------- */
 

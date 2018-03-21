@@ -28,8 +28,8 @@ int main(int argc, char ** argv, char ** envp){
         }
         //print_tokens(tokens, num_tokens);
 	make_cmdtable(tokens,num_tokens);
-	print_cmdtable();
-	//execute(no_cmd);
+	//print_cmdtable();
+	execute(no_cmd);
     }
     return 0;
 }
