@@ -12,9 +12,9 @@ void make_cmdtable(char ** tokens, int num_tokens)
 	cmd_table[no_cmd].cmdtkns = (char **)malloc(sizeof(char *) * 1);
 	int i,j=0;
 	cmd_table[no_cmd].infile = (char *)malloc(strlen(def_in));
-	strcpy(cmd_table[no_cmd].infile,"stdin");
+	cmd_table[no_cmd].infile = def_in;
 	cmd_table[no_cmd].outfile = (char *)malloc(strlen(def_out));
-	strcpy(cmd_table[no_cmd].outfile,"stdout");
+	cmd_table[no_cmd].outfile = def_out;
 	for(i=0;i<num_tokens;i++)
 	{
 		if(strcmp("<",tokens[i])==0)
