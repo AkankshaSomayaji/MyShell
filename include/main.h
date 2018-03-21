@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <termios.h> 
 #include "tokens.h"
+//#include "execute.h"
 
 /* ------------------------------- Macros -------------------------------- */
 
@@ -33,14 +34,12 @@ Maximum string length of the input commands
 */
 #define MAX_INPUT 262144
 
-
 /* --------------------------- Global Variables -------------------------- */
 
 /*
 Global environment variable
 */
 extern char ** environ;
-
 
 /* --------------------------- Function Headers -------------------------- */
 
@@ -53,6 +52,5 @@ void greet();
 Prints the command prompt
 */
 void prompt();
-
 
 #endif

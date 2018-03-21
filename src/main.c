@@ -26,7 +26,10 @@ int main(int argc, char ** argv, char ** envp){
         if(strcmp(tokens[0], "end") == 0){
             return 0;
         }
-        print_tokens(tokens, num_tokens);
+        //print_tokens(tokens, num_tokens);
+	make_cmdtable(tokens,num_tokens);
+	print_cmdtable();
+	//execute(no_cmd);
     }
     return 0;
 }
@@ -39,7 +42,7 @@ void greet(){
 }
 
 void prompt(){
-	char hostname[2048], cwd[2048], cwd_dir[2048], temp;
+    char hostname[2048], cwd[2048], cwd_dir[2048], temp;
     int i = 0, j = 0;
     gethostname(hostname, sizeof(hostname));
     getcwd(cwd, 1024);
