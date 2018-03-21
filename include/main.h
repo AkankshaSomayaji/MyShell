@@ -16,6 +16,7 @@
 #include <termios.h> 
 #include "tokens.h"
 #include "execute.h"
+#include "cmdtable.h"
 
 /* ------------------------------- Macros -------------------------------- */
 

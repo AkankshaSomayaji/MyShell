@@ -2,6 +2,7 @@
 
 #include "../include/execute.h"
 #include "../include/tokens.h"
+#include "../include/cmdtable.h"
 
 /* ------------------------ Function Definitions ------------------------ */
 

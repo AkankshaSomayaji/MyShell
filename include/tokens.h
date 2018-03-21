@@ -15,20 +15,6 @@
 #include <fcntl.h>
 #include <termios.h> 
 
-/*
-command structure
-*/
-
-struct command_table
-{
-char ** cmdtkns;
-int num_tokens;
-char * outfile;
-char * infile;
-};
-
-struct command_table cmd_table[25];
-int no_cmd;
 
 /* --------------------------- Function Headers -------------------------- */
 

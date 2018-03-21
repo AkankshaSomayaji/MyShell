@@ -1,6 +1,6 @@
 username = $(shell whoami)
 SRCDIR = src
-files = $(SRCDIR)/main.c $(SRCDIR)/tokens.c $(SRCDIR)/execute.c
+files = $(SRCDIR)/main.c $(SRCDIR)/tokens.c $(SRCDIR)/execute.c $(SRCDIR)/cmdtable.c
 opflag = -o shell
 
 all: run
