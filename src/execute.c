@@ -8,22 +8,13 @@
 
 void execute(int num)
 {
-		int i = num-1, j , status;
+		int i = num-1 , status;
 		pid_t pid;
 		int ret = 0;
-
-		char **arg = (char **)malloc(sizeof(char *) * 1);
-		for(j = 0; j < cmd_table[i].num_tokens ; j++)
-		{
-			arg = (char **)realloc(arg,sizeof(char *) * (j+1));
-			arg[j] = (char *)malloc(sizeof(char) * (strlen(cmd_table[i].cmdtkns[j]) + 1));
-			strcpy(arg[j],cmd_table[i].cmdtkns[j]);	
-		}
-		arg = (char **)realloc(arg,sizeof(char *) * (j+1));
-		arg[j] = NULL;
-
-		if(strcmp(arg[0], "cd") == 0){
-			ret = change_directory(arg);
+		cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens+1));
+		cmd_table[i].cmdtkns[cmd_table[i].num_tokens] = NULL;
+		if(strcmp(cmd_table[i].cmdtkns[0], "cd") == 0){
+			ret = change_directory(cmd_table[i].cmdtkns);
 			if(ret < 0){
 				perror("cd");
 			}
@@ -36,7 +27,7 @@ void execute(int num)
 			perror("fork");
 		}
 		else if(pid==0){
-			if(execvp(arg[0],arg)<0){
+			if(execvp(cmd_table[i].cmdtkns[0],cmd_table[i].cmdtkns)<0){
 				perror("exec");
 				printf("Command doesnt exist\n");
 				exit(1);
