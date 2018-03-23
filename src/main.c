@@ -5,6 +5,7 @@
 /* ---------------------------- Main Function ---------------------------- */
 
 int main(int argc, char ** argv, char ** envp){
+    int i = 0;
     char * input = (char *)calloc(sizeof(char), MAX_INPUT);
     char ** tokens = NULL;
     int num_tokens = 0;
@@ -24,12 +25,17 @@ int main(int argc, char ** argv, char ** envp){
             tokenize(input, &tokens, &num_tokens);
         }
         if(strcmp(tokens[0], "exit") == 0){
+            clean_up(input, tokens, num_tokens);
             return 0;
         }
         //print_tokens(tokens, num_tokens);
-	make_cmdtable(tokens,num_tokens);
-	//print_cmdtable();
-	execute(no_cmd);
+        make_cmdtable(tokens,num_tokens);
+        //print_cmdtable();
+        execute(no_cmd);
+        for(i = 0; i < num_tokens; i++){
+            free(tokens[i]);
+        }
+        free(tokens);
     }
     return 0;
 }
@@ -59,5 +65,23 @@ void prompt(){
         cwd_dir[strlen(cwd_dir) - i - 1] = temp; 
     }
 	printf("%s:%s > ", getenv("LOGNAME"), cwd_dir);
+    return;
+}
+
+void clean_up(char * input, char ** tokens, int num_tokens){
+    int i = 0, j = 0;
+    free(input);
+    for(i = 0; i < num_tokens; i++){
+        free(tokens[i]);
+    }
+    free(tokens);
+    for(i = 0; i < no_cmd; i++){
+        for(j = 0; j < cmd_table[i].num_tokens; j++){
+            free(cmd_table[i].cmdtkns[j]);
+        }
+        free(cmd_table[i].cmdtkns);
+        free(cmd_table[i].infile);
+        free(cmd_table[i].outfile);
+    }
     return;
 }

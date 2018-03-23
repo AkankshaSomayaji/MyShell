@@ -19,7 +19,7 @@ void tokenize(char * input, char *** tok, int * num_tok){
 
     num_tokens++;    
     tokens = (char **)realloc(tokens, sizeof(char *) * (num_tokens + 1));
-    
+
 	while((temp = strtok(NULL, " \n\t")) != NULL) {
         tokens[num_tokens] = (char *)malloc(sizeof(char) * (strlen(temp) + 1));
         strcpy(tokens[num_tokens], temp);
@@ -28,6 +28,8 @@ void tokenize(char * input, char *** tok, int * num_tok){
         tokens = (char **)realloc(tokens, sizeof(char *) * (num_tokens + 1));
     }
 
+    free(temp);
+    
     *tok = (char **)malloc(sizeof(char *) * num_tokens);
     for(i = 0; i < num_tokens; i++){
         (*tok)[i] = (char *)malloc(sizeof(char) * (strlen(tokens[i]) + 1));

@@ -54,4 +54,9 @@ Prints the command prompt
 */
 void prompt();
 
+/*
+Performs all clean up actions
+*/
+void clean_up(char * input, char ** tokens, int num_tokens);
+
 #endif
