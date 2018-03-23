@@ -27,10 +27,5 @@ void tokenize(char * input, char *** tok, int * num_tok);
 Prints the tokens generated for a given input string
 */
 void print_tokens(char ** tokens, int num_tokens);
-/*
-prints command tabe
-*/
-//void print_cmdtable(struct command *cmd);
-void make_cmdtable(char ** tokens, int num_tokens);
-void print_cmdtable();
+
 #endif
