@@ -54,4 +54,9 @@ Shift command table by 1 after 25 commands
 */
 void shift_table();
 
+/*
+Writes 25 most recent commands to the history file
+*/
+void update_history();
+
 #endif

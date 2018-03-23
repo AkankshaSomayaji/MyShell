@@ -7,7 +7,7 @@
 /* ------------------------ Function Definitions ------------------------ */
 
 void execute(int num){
-		printf("NUM : %d\n", num);
+
 		int i = num - 1 , status;
 		pid_t pid;
 		int ret = 0;

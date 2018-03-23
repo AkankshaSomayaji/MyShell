@@ -50,6 +50,10 @@ void make_cmdtable(char ** tokens, int num_tokens){
 	}
 	no_cmd = no_cmd + 1;
 
+	update_history();
+
+	return;
+
 }		
 
 void shift_table(){
@@ -88,18 +92,63 @@ void shift_table(){
 	cmd_table[i].num_tokens = 0;
 
 	no_cmd = 24;
-	
+
 	return ;
 }
 
-void print_cmdtable()
-{
+void update_history(){
+
+	int fd = -1, write_ret = -1, i = 0, j = 0;
+
+	char * home_dir = NULL;
+	char * path = NULL;
+
+	home_dir = getenv("HOME"); 
+	path = (char *)calloc(sizeof(char),  (strlen(home_dir) + 2 + strlen("myshell_history")));
+
+	strcat(path, home_dir);
+	strcat(path, "/");
+	strcat(path, "myshell_history");
+
+	fd = open(path, O_CREAT | O_TRUNC | O_RDWR, 0644);
+	
+    if(fd < 0){
+        perror("fd1");
+    }
+	else{
+		for(j = 0; j < no_cmd; j++){
+
+			for(i = 0; i < cmd_table[j].num_tokens; i++){
+
+				write_ret = write(fd, cmd_table[j].cmdtkns[i], strlen(cmd_table[j].cmdtkns[i]));
+
+				if(write_ret < 0){
+					perror("Write error [token]!");
+				}
+
+				write_ret = write(fd, " ", 1);
+				if(write_ret < 0){
+					perror("Write error [delimiter - space]!");
+				}
+        
+			}
+
+			write_ret = write(fd, "\n", 1);
+			if(write_ret < 0){
+				perror("Write error [delimiter - newline]!");
+			}
+		}
+		close(fd);
+	}
+
+	return;
+}
+
+void print_cmdtable(){
 	int i = 0 , j = 0;
-	for(i = 0; i<no_cmd;i++)
-	{
+	for(i = 0; i < no_cmd; i++){
 		printf("Command :%d\n",i);
-		for(j = 0; j < cmd_table[i].num_tokens ; j++)
-		{
+		for(j = 0; j < cmd_table[i].num_tokens ; j++){
 			printf("%s\t",cmd_table[i].cmdtkns[j]);
 		}
 		printf("\nin file is : %s\n",cmd_table[i].infile);
