@@ -6,13 +6,15 @@
 
 /* ------------------------ Function Definitions ------------------------ */
 
-void execute(int num)
-{
-		int i = num-1 , status;
+void execute(int num){
+		printf("NUM : %d\n", num);
+		int i = num - 1 , status;
 		pid_t pid;
 		int ret = 0;
+
 		cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens+1));
 		cmd_table[i].cmdtkns[cmd_table[i].num_tokens] = NULL;
+
 		if(strcmp(cmd_table[i].cmdtkns[0], "cd") == 0){
 			ret = change_directory(cmd_table[i].cmdtkns);
 			if(ret < 0){

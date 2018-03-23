@@ -42,6 +42,11 @@ Global environment variable
 */
 extern char ** environ;
 
+/* 
+interger count of commands 
+*/
+extern int no_cmd;
+
 /* --------------------------- Function Headers -------------------------- */
 
 /*

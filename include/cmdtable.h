@@ -3,6 +3,18 @@
 #ifndef CMDTABLE_H
 #define CMDTABLE_H
 
+/* ------------------------------ Includes ------------------------------- */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <termios.h> 
+
 /* --------------------------- Global Variables -------------------------- */
 
 /*
@@ -18,12 +30,12 @@ struct command_table{
 /* 
 global command table 
 */
-struct command_table cmd_table[25];
+extern struct command_table cmd_table[25];
 
 /* 
 interger count of commands 
 */
-int no_cmd;
+extern int no_cmd;
 
 /* --------------------------- Function Headers -------------------------- */
 
@@ -36,5 +48,10 @@ void make_cmdtable(char ** tokens, int num_tokens);
 print command table
 */
 void print_cmdtable();
+
+/*
+Shift command table by 1 after 25 commands
+*/
+void shift_table();
 
 #endif

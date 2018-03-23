@@ -3,6 +3,26 @@
 #ifndef EXECUTE_H
 #define EXECUTE_H
 
+/* ------------------------------ Includes ------------------------------- */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <termios.h> 
+#include "cmdtable.h"
+
+/* --------------------------- Global Variables -------------------------- */
+
+/* 
+global command table 
+*/
+extern struct command_table cmd_table[25];
+
 /* --------------------------- Function Headers -------------------------- */
 
 /*
