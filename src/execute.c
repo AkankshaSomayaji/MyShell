@@ -8,7 +8,7 @@
 
 void execute(int num){
 
-		int i = num - 1 , status;
+		int i = num - 1 , status , fd = -1;
 		pid_t pid;
 		int ret = 0;
 
@@ -29,6 +29,31 @@ void execute(int num){
 			perror("fork");
 		}
 		else if(pid==0){
+			if(strcmp("stdin",cmd_table[i].infile)!=0){
+				fd = open(cmd_table[i].infile,O_RDONLY,0644);
+				close(0);
+				dup(fd);
+				
+			}
+			if(strcmp("stdout",cmd_table[i].outfile)!=0){
+				if(cmd_table[i].out_append == 1){
+					fd = open(cmd_table[i].outfile,O_CREAT|O_APPEND|O_WRONLY,0644);
+				}
+				else{
+					fd = open(cmd_table[i].outfile,O_CREAT|O_WRONLY,0644);
+				}
+				close(1);
+				dup(fd);
+				
+			}
+
+			if(strcmp("stdout",cmd_table[i].errfile)!=0){
+				close(1);
+				fd = open(cmd_table[i].errfile,O_CREAT|O_WRONLY,0644);
+				close(2);
+				dup(fd);
+			}	
+
 			if(execvp(cmd_table[i].cmdtkns[0],cmd_table[i].cmdtkns)<0){
 				perror("exec");
 				printf("Command doesnt exist\n");

@@ -24,7 +24,9 @@ struct command_table{
     char ** cmdtkns;
     int num_tokens;
     char * outfile;
+    int out_append;
     char * infile;
+    char * errfile;
 };
 
 /* 
