@@ -31,6 +31,16 @@ execute the command
 void execute(int);
 
 /*
+execute simple command
+*/
+void execute_simple_command(int num);
+
+/*
+execute piped command
+*/
+void execute_pipe_command(int num);
+
+/*
 Change directory to the given argument
 */
 int change_directory(char ** arg);

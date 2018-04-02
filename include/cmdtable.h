@@ -27,6 +27,7 @@ struct command_table{
     int out_append;
     char * infile;
     char * errfile;
+    int pipe;
 };
 
 /* 

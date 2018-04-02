@@ -33,6 +33,8 @@ void make_cmdtable(char ** tokens, int num_tokens){
 
 	cmd_table[no_cmd].num_tokens = 0;
 
+	cmd_table[no_cmd].pipe = 0;
+
 	for(i = 0; i < num_tokens; i++)
 	{
 		if(io_red != 0)
@@ -41,15 +43,19 @@ void make_cmdtable(char ** tokens, int num_tokens){
 			continue;
 		}
 
+		if(strcmp("|", tokens[i]) == 0){
+			cmd_table[no_cmd].pipe += 1;
+		}
+
 		if(strcmp("<", tokens[i]) == 0){
-			cmd_table[no_cmd].infile = (char *)realloc(cmd_table[no_cmd].infile, strlen(tokens[i+1]));
+			cmd_table[no_cmd].infile = (char *)realloc(cmd_table[no_cmd].infile, strlen(tokens[i+1])+1);
 			strcpy(cmd_table[no_cmd].infile , tokens[i+1]);
 			io_red = 1;	
 			continue;
 		}
 
 		if(strcmp(">", tokens[i]) == 0){
-			cmd_table[no_cmd].outfile = (char *)realloc(cmd_table[no_cmd].outfile,strlen(tokens[i+1]));
+			cmd_table[no_cmd].outfile = (char *)realloc(cmd_table[no_cmd].outfile,strlen(tokens[i+1])+1);
 			strcpy(cmd_table[no_cmd].outfile , tokens[i+1]);
 			cmd_table[no_cmd].out_append = 0;
 			io_red = 1;
@@ -57,7 +63,7 @@ void make_cmdtable(char ** tokens, int num_tokens){
 		}
 
 		if(strcmp(">>", tokens[i]) == 0){
-			cmd_table[no_cmd].outfile = (char *)realloc(cmd_table[no_cmd].outfile,strlen(tokens[i+1]));
+			cmd_table[no_cmd].outfile = (char *)realloc(cmd_table[no_cmd].outfile,strlen(tokens[i+1])+1);
 			strcpy(cmd_table[no_cmd].outfile , tokens[i+1]);
 			cmd_table[no_cmd].out_append = 1;
 			io_red = 1;
@@ -65,14 +71,14 @@ void make_cmdtable(char ** tokens, int num_tokens){
 		}
 
 		if(strcmp("2>", tokens[i]) == 0){
-			cmd_table[no_cmd].errfile = (char *)realloc(cmd_table[no_cmd].errfile,strlen(tokens[i+1]));
+			cmd_table[no_cmd].errfile = (char *)realloc(cmd_table[no_cmd].errfile,strlen(tokens[i+1])+1);
 			strcpy(cmd_table[no_cmd].errfile , tokens[i+1]);
 			io_red = 1;
 			continue;
 		}
 
 		if(strcmp("2>&1", tokens[i]) == 0){	
-			cmd_table[no_cmd].errfile = (char *)realloc(cmd_table[no_cmd].errfile,strlen(cmd_table[no_cmd].outfile));
+			cmd_table[no_cmd].errfile = (char *)realloc(cmd_table[no_cmd].errfile,strlen(cmd_table[no_cmd].outfile)+1);
 			strcpy(cmd_table[no_cmd].errfile , cmd_table[no_cmd].outfile);
 			continue;
 		}
