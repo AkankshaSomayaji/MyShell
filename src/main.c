@@ -130,27 +130,27 @@ return -1;
 void set_alias_table(int num, char **tok){
 	int index = alias_num+ 1;
 	int i,j;
-	alias_table[index].a_tok = (char **)malloc(sizeof(char *) * 1);
+	alias_table[index].a_val = (char **)malloc(sizeof(char *) * 1);
 	for(i = 1; i <num;i++){
 		if(strcmp(tok[i],"=")==0)
 			break;
-		alias_table[index].a_tok = (char **)realloc(alias_table[index].a_tok,sizeof(char *) * (i));
-		alias_table[index].a_tok[i-1] = (char *)malloc(sizeof(char) * (strlen(tok[i]) + 1));
-		strcpy(alias_table[index].a_tok[i-1],tok[i]);	
+		alias_table[index].a_val = (char **)realloc(alias_table[index].a_val,sizeof(char *) * (i));
+		alias_table[index].a_val[i-1] = (char *)malloc(sizeof(char) * (strlen(tok[i]) + 1));
+		strcpy(alias_table[index].a_val[i-1],tok[i]);	
 	}
-	alias_table[index].tok_num=i - 1;
-	printf("num is :%d\n",alias_table[index].tok_num);
+	alias_table[index].val_num=i - 1;
+	printf("num is :%d\n",alias_table[index].val_num);
 
-	alias_table[index].a_val = (char **)malloc(sizeof(char *) * 1);
-	j=i+1;
+	alias_table[index].a_tok = (char **)malloc(sizeof(char *) * 1);
+	j=i+2;
 	int ct = 0;
-	for(i = j; i <num;i++){
-		alias_table[index].a_val = (char **)realloc(alias_table[index].a_val,sizeof(char *) * (ct + 1));
-		alias_table[index].a_val[ct] = (char *)malloc(sizeof(char) * (strlen(tok[i]) + 1));
-		strcpy(alias_table[index].a_val[ct],tok[i]);	
+	for(i = j; i < num;i++){
+		alias_table[index].a_tok = (char **)realloc(alias_table[index].a_tok,sizeof(char *) * (ct + 1));
+		alias_table[index].a_tok[ct] = (char *)malloc(sizeof(char) * (strlen(tok[i]) + 1));
+		strcpy(alias_table[index].a_tok[ct],tok[i]);	
 		ct = ct + 1;
 	}
-	alias_table[index].val_num=i-j;
+	alias_table[index].tok_num=i-j-1;
 
 	printf("\ntok:\n");
 	for(j = 0; j < alias_table[index].tok_num ; j++){
