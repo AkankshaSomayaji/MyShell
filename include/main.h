@@ -18,6 +18,15 @@
 #include "execute.h"
 #include "cmdtable.h"
 
+
+struct alias{
+	char **a_tok;
+	char ** a_val;
+	int tok_num;
+	int val_num;
+};
+struct alias alias_table[10];
+int alias_num=-1;
 /* ------------------------------- Macros -------------------------------- */
 
 /*
@@ -63,5 +72,7 @@ void prompt();
 Performs all clean up actions
 */
 void clean_up(char * input, char ** tokens, int num_tokens);
-
+//---------------
+void set_alias_table(int num_tokens,char ** tokens);
+int check(char * tok);
 #endif

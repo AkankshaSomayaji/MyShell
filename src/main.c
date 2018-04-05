@@ -28,16 +28,94 @@ int main(int argc, char ** argv, char ** envp){
             clean_up(input, tokens, num_tokens);
             return 0;
         }
+		if(strcmp(tokens[0],"alias")==0){
+			set_alias_table(num_tokens,tokens);
+			continue;
+		}
+		int ret = check(tokens[0]);
+		if(ret>=0){
+			printf("ret: %d\n",ret);
+			char ** cpy_tokens = NULL;
+			cpy_tokens = (char **)malloc(sizeof(char *) * 1);
+			int k;
+			int ct = 0;
+			for(k = 0;k < alias_table[ret].tok_num;k++)
+			{
+				cpy_tokens= (char **)realloc(cpy_tokens,sizeof(char *) * (k + 1));
+				cpy_tokens[k] = (char *)malloc(sizeof(char) * (strlen(alias_table[ret].a_tok[k]) + 1));
+				strcpy(cpy_tokens[k],alias_table[ret].a_tok[k]);	
+			}
+			ct = k-1;
+			for(k = 1; k < num_tokens; k++)
+			{
+				cpy_tokens= (char **)realloc(cpy_tokens,sizeof(char *) * (k + ct+1));
+				cpy_tokens[ct + k] = (char *)malloc(sizeof(char) * (strlen(tokens[k]) + 1));
+				strcpy(cpy_tokens[ct + k],tokens[k]);	
+			}
+			num_tokens = ct +k;
+			tokens = cpy_tokens;
+			for(int j = 0; j < num_tokens  ; j++){
+			printf("%s\n",tokens[j]);
+			}
+		}
+		
         //print_tokens(tokens, num_tokens);
         make_cmdtable(tokens,num_tokens);
         //print_cmdtable();
         execute(no_cmd);
+		
         for(i = 0; i < num_tokens; i++){
             free(tokens[i]);
         }
         free(tokens);
     }
     return 0;
+}
+
+int check(char *tok){
+for (int i =0;i<=alias_num;i++){
+	if(strcmp(alias_table[i].a_val[0],tok)==0)
+		return i;
+	}
+return -1;
+
+
+}
+void set_alias_table(int num, char **tok){
+int index = alias_num+ 1;
+int i,j;
+alias_table[index].a_tok = (char **)malloc(sizeof(char *) * 1);
+for(i = 1; i <num;i++){
+	if(strcmp(tok[i],"=")==0)
+		break;
+	alias_table[index].a_tok = (char **)realloc(alias_table[index].a_tok,sizeof(char *) * (i));
+	alias_table[index].a_tok[i-1] = (char *)malloc(sizeof(char) * (strlen(tok[i]) + 1));
+	strcpy(alias_table[index].a_tok[i-1],tok[i]);	
+}
+alias_table[index].tok_num=i - 1;
+printf("num is :%d\n",alias_table[index].tok_num);
+
+alias_table[index].a_val = (char **)malloc(sizeof(char *) * 1);
+j=i+1;
+int ct = 0;
+for(i = j; i <num;i++){
+	alias_table[index].a_val = (char **)realloc(alias_table[index].a_val,sizeof(char *) * (ct + 1));
+	alias_table[index].a_val[ct] = (char *)malloc(sizeof(char) * (strlen(tok[i]) + 1));
+	strcpy(alias_table[index].a_val[ct],tok[i]);	
+	ct = ct + 1;
+}
+alias_table[index].val_num=i-j;
+
+printf("\ntok:\n");
+for(j = 0; j < alias_table[index].tok_num ; j++){
+			printf("%s\n",alias_table[index].a_tok[j]);
+}
+printf("num is :%d\n",alias_table[index].val_num);
+printf("\nval:\n");
+for(j = 0; j < alias_table[index].val_num ; j++){
+			printf("%s\n",alias_table[index].a_val[j]);}
+alias_num+=1;
+return;
 }
 
 /* ------------------------ Function Definitions ------------------------ */
