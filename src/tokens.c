@@ -32,9 +32,24 @@ void tokenize(char * input, char *** tok, int * num_tok){
     
     *tok = (char **)malloc(sizeof(char *) * num_tokens);
     for(i = 0; i < num_tokens; i++){
-        (*tok)[i] = (char *)malloc(sizeof(char) * (strlen(tokens[i]) + 1));
-        strcpy((*tok)[i], tokens[i]);
-        (*tok)[i][strlen(tokens[i])] = '\0';
+	if(tokens[i][0]=='$'){
+		temp = getenv(tokens[i]);
+		printf("getenv:%s",temp);
+		if(temp == NULL){
+			perror("getenv");
+			return;
+		}
+		else{
+			(*tok)[i] = (char *)malloc(sizeof(char) * (strlen(temp) + 1));
+			strcpy((*tok)[i], temp);
+			(*tok)[i][strlen(tokens[i])] = '\0';
+		}
+	}
+	else{	
+		(*tok)[i] = (char *)malloc(sizeof(char) * (strlen(tokens[i]) + 1));
+		strcpy((*tok)[i], tokens[i]);
+		(*tok)[i][strlen(tokens[i])] = '\0';
+	}
     }
 
     *(num_tok) = num_tokens;

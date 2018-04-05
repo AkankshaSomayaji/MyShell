@@ -24,6 +24,19 @@ int main(int argc, char ** argv, char ** envp){
         else{
             tokenize(input, &tokens, &num_tokens);
         }
+	if(strcmp(tokens[0], "export") == 0){
+            char * temp_tok = (char *)malloc(sizeof(char)*1);
+	    int j;
+	    for(j = 0;j<strlen(tokens[1])-2;j++){
+		temp_tok = (char *)realloc(temp_tok,sizeof(char)*j+1);
+		temp_tok[j]=tokens[1][j+1];
+	    }
+            temp_tok = (char *)realloc(temp_tok,sizeof(char)*j+1);
+	    temp_tok[j] = '\0';
+	    //printf("before putenv:%s\n",temp_tok);
+            putenv(temp_tok);
+	    continue;
+        }
         if(strcmp(tokens[0], "exit") == 0){
             clean_up(input, tokens, num_tokens);
             return 0;
