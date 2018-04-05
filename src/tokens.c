@@ -33,8 +33,15 @@ void tokenize(char * input, char *** tok, int * num_tok){
     *tok = (char **)malloc(sizeof(char *) * num_tokens);
     for(i = 0; i < num_tokens; i++){
 	if(tokens[i][0]=='$'){
-		temp = getenv(tokens[i]);
-		printf("getenv:%s",temp);
+		char * temp_tok = (char *)malloc(sizeof(char)*1);
+		int j;
+		for(j = 0;j<strlen(tokens[1])-1;j++){
+			temp_tok = (char *)realloc(temp_tok,sizeof(char)*j+1);
+			temp_tok[j]=tokens[1][j+1];
+		}
+		temp_tok = (char *)realloc(temp_tok,sizeof(char)*j+1);
+		temp_tok[j] = '\0';
+		temp = getenv(temp_tok);
 		if(temp == NULL){
 			perror("getenv");
 			return;
@@ -58,7 +65,7 @@ void tokenize(char * input, char *** tok, int * num_tok){
         free(tokens[i]);
     }
     free(tokens);
-    free(temp);
+    //free(temp);
     return ;
 }
 
