@@ -41,8 +41,21 @@ execute piped command
 void execute_pipe_command(int num);
 
 /*
+execute cmd when there is &&
+*/
+void execute_and_command(int num);
+
+/*
+execute cmd when there is ;
+*/
+void execute_chain_command(int num);
+
+
+/*
 Change directory to the given argument
 */
 int change_directory(char ** arg);
+
+void execute_and_command(int num);
 
 #endif 

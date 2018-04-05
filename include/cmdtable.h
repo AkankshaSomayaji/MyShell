@@ -28,6 +28,8 @@ struct command_table{
     char * infile;
     char * errfile;
     int pipe;
+    int andop;
+    int chainop;
 };
 
 /* 
