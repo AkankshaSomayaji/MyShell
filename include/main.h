@@ -18,15 +18,6 @@
 #include "execute.h"
 #include "cmdtable.h"
 
-
-struct alias{
-	char **a_tok;
-	char ** a_val;
-	int tok_num;
-	int val_num;
-};
-struct alias alias_table[10];
-int alias_num=-1;
 /* ------------------------------- Macros -------------------------------- */
 
 /*
@@ -55,6 +46,28 @@ extern char ** environ;
 interger count of commands 
 */
 extern int no_cmd;
+
+
+/*
+global alias structure
+*/
+struct alias{
+	char **a_tok;
+	char ** a_val;
+	int tok_num;
+	int val_num;
+};
+
+/*
+global alias table
+*/
+struct alias alias_table[10];
+
+/*
+index of last alias
+*/
+int alias_num=-1;
+
 
 /* --------------------------- Function Headers -------------------------- */
 
