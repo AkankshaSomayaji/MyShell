@@ -10,50 +10,55 @@
 void execute(int num){
 
 		int i = num - 1, j =0;
+		
 
 
+		/* below for loop is only for replacing wild char (* and ?) */
 		for(j=0;j<cmd_table[i].num_tokens;j++)
 		{
+			int len = cmd_table[i].num_tokens;
 			glob_t glob_buf;
 			int glob_ct = 0;
 			if(strchr(cmd_table[i].cmdtkns[j],'*') !=NULL || strchr(cmd_table[i].cmdtkns[j],'?')!=NULL)
 			{
+				int k = 0;
+				char ** new_cmd = (char **)malloc(sizeof(char *)*1);
+				for(k = 0; k < j;k++)
+				{
+					new_cmd = (char **)realloc(new_cmd,sizeof(char *) * (k + 1));
+					new_cmd[k] = (char *)malloc(sizeof(char) * (strlen(cmd_table[i].cmdtkns[k]) + 1));
+					strcpy(new_cmd[k],cmd_table[i].cmdtkns[k]);
+				}
 				char *temp = malloc(sizeof(char *)*strlen(cmd_table[i].cmdtkns[j]));
 				strcpy(temp,cmd_table[i].cmdtkns[j]);
-				free(cmd_table[i].cmdtkns[j]);
-				cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens-1));
-				cmd_table[i].num_tokens= cmd_table[i].num_tokens-1;
 				glob(temp,0,NULL,&glob_buf);
 				glob_ct = glob_buf.gl_pathc;
-				printf(" it %s",temp);
-				for(int k =0; k <glob_ct;k++)
+				int x = k;
+				int y = k + 1;
+				cmd_table[i].num_tokens = cmd_table[i].num_tokens - 1;
+				for(k =0; k < glob_ct;k++)
 				{
-					cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens+1));
-					cmd_table[i].cmdtkns[cmd_table[i].num_tokens] = (char *)malloc(sizeof(char *)*strlen(glob_buf.gl_pathv[k])+1);
-					/*temp = strcat(temp,glob_buf.gl_pathv[k]);
-					if(k!=glob_ct-1)
-						temp = strcat(temp," ");
-					cmd_table[i].cmdtkns[j] = (char *)realloc(cmd_table[i].cmdtkns[j],strlen(temp)+1);*/
-					strcpy(cmd_table[i].cmdtkns[cmd_table[i].num_tokens],glob_buf.gl_pathv[k]);
+					new_cmd = (char **)realloc(new_cmd,sizeof(char *)*(x+1));
+					new_cmd[x] = (char *)malloc(sizeof(char *)*strlen(glob_buf.gl_pathv[k])+1);
+					strcpy(new_cmd[x],glob_buf.gl_pathv[k]);
 					cmd_table[i].num_tokens += 1;
+					x += 1;
 				}
+
+				for(k = y; k < len;k++)
+				{
+					new_cmd = (char **)realloc(new_cmd,sizeof(char *) * (x + 1));
+					new_cmd[x] = (char *)malloc(sizeof(char) * (strlen(cmd_table[i].cmdtkns[k]) + 1));
+					strcpy(new_cmd[x],cmd_table[i].cmdtkns[k]);
+					x += 1;
+				}
+				cmd_table[i].cmdtkns = new_cmd;
 			}
 		}
-				
-		//print_cmdtable();
+			
 		cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens+1));
 		cmd_table[i].cmdtkns[cmd_table[i].num_tokens] = NULL;
-
-		if(strcmp(cmd_table[i].cmdtkns[0], "cd") == 0){
-			int ret = 0;
-			ret = change_directory(cmd_table[i].cmdtkns);
-			if(ret < 0){
-				perror("cd");
-			}
-			else{
-				return;
-			}
-		}
+		
 		if(cmd_table[i].pipe != 0)
 		{
 			execute_pipe_command(num);
@@ -146,9 +151,16 @@ void execute_simple_command(int num)
 	cmds = (char **)realloc(cmds,sizeof(char *)*(ct+1));
 	cmds[ct] = NULL;
 	
-	/*int g = 0;
-	for(g=0;g<ct;g++)
-		printf("%s\t",cmds[g]);*/
+	if(strcmp(cmds[0], "cd") == 0){
+		int ret = 0;
+		ret = change_directory(cmds);
+		if(ret < 0){
+			perror("cd");
+		}
+		else{
+			return;
+		}
+	}
 
 	if((pid=fork())<0){
 		perror("fork");
@@ -193,6 +205,7 @@ void execute_simple_command(int num)
 
 void execute_pipe_command(int num)
 {
+	//printf("\npipe command\n");
 	int i = num - 1, status,io_red=0;
 	pid_t pid;
 	int ct = 0;
@@ -363,7 +376,6 @@ void execute_pipe_command(int num)
 }
 void execute_and_command(int num)
 {
-	//printf("\n inside qwerty");
 	char ** and_cmds = malloc(sizeof(char *) * 1);
 	int k = 0, j = 0 , z = 0, set = 0 , last = 0, io_red=0;
 
@@ -449,6 +461,21 @@ void execute_and_command(int num)
 			
 			if(status == 0)
 			{
+				if(strcmp(cmds[0], "cd") == 0){
+				int ret = 0;
+				ret = change_directory(cmds);
+					if(ret < 0){
+						perror("cd");
+					}
+					else{
+						if(last == 1)
+							break;
+						k = 0;
+						and_cmds = (char **)realloc(and_cmds,sizeof(char *)*1);
+						cmd_table[i].andop -= 1;	
+						continue;
+					}
+				}
 				int fd = -1;
 				if((pid=fork())<0){
 					perror("fork");
@@ -461,7 +488,6 @@ void execute_and_command(int num)
 						dup(fd);				
 					}
 					if(strcmp("stdout",cmd_table[i].outfile)!=0){
-						//printf("\nhello\n");
 						if(cmd_table[i].out_append == 1){
 							fd = open(cmd_table[i].outfile,O_CREAT|O_APPEND|O_WRONLY,0644);
 						}
@@ -515,7 +541,6 @@ void execute_and_command(int num)
 
 void execute_chain_command(int num)
 {
-	//printf("\n inside qwerty");
 	char ** and_cmds = malloc(sizeof(char *) * 1);
 	int k = 0, j = 0 , z = 0, set = 0 , last = 0, io_red=0;
 
@@ -599,15 +624,27 @@ void execute_chain_command(int num)
 			cmds = (char **)realloc(cmds,sizeof(char *)*(ct+1));
 			cmds[ct] = NULL;
 			
-			//if(status == 0)
-			//{
-				//printf("out:%s",cmd_table[i].outfile);
-				int fd = -1;
-				if((pid=fork())<0){
-					perror("fork");
-				}
-				else if(pid==0){
-					
+			if(strcmp(cmds[0], "cd") == 0){
+				int ret = 0;
+				ret = change_directory(cmds);
+					if(ret < 0){
+						perror("cd");
+					}
+					else{
+						if(last == 1)
+							break;
+						k = 0;
+						and_cmds = (char **)realloc(and_cmds,sizeof(char *)*1);
+						cmd_table[i].chainop -= 1;	
+						continue;
+					}
+			}
+			int fd = -1;
+			if((pid=fork())<0){
+				perror("fork");
+			}
+			else if(pid==0){
+				
 					if(strcmp("stdin",cmd_table[i].infile)!=0){
 						fd = open(cmd_table[i].infile,O_RDONLY,0644);
 						close(0);
@@ -635,16 +672,16 @@ void execute_chain_command(int num)
 						perror("exec");
 						exit(-1);
 					}
-				}
-				else{
-					pid = waitpid(pid,&status,WUNTRACED);
-					cmd_table[i].errfile = (char *)realloc(cmd_table[i].errfile,strlen("stdout")+1);
-					strcpy(cmd_table[i].errfile , "stdout");
-					cmd_table[i].outfile = (char *)realloc(cmd_table[i].outfile,strlen("stdout")+1);
-					strcpy(cmd_table[i].outfile , "stdout");
-					cmd_table[i].infile = (char *)realloc(cmd_table[i].infile,strlen("stdin")+1);
-					strcpy(cmd_table[i].infile , "stdin");
-				}
+			}
+			else{
+				pid = waitpid(pid,&status,WUNTRACED);
+				cmd_table[i].errfile = (char *)realloc(cmd_table[i].errfile,strlen("stdout")+1);
+				strcpy(cmd_table[i].errfile , "stdout");
+				cmd_table[i].outfile = (char *)realloc(cmd_table[i].outfile,strlen("stdout")+1);
+				strcpy(cmd_table[i].outfile , "stdout");
+				cmd_table[i].infile = (char *)realloc(cmd_table[i].infile,strlen("stdin")+1);
+				strcpy(cmd_table[i].infile , "stdin");
+			}
 			//}
 			if(last == 1)
 				break;
