@@ -1,0 +1,12 @@
+total 84
+-rw-r--r-- 1 aishwarya aishwarya     8 Apr  6 07:48 a
+-rw-r--r-- 1 aishwarya aishwarya     8 Apr  6 07:48 aa
+-rw-rw-r-- 1 aishwarya aishwarya    21 Apr  5 23:29 a.py
+drwxrwxr-x 4 aishwarya aishwarya  4096 Apr  5 21:23 editor
+-rw-r--r-- 1 aishwarya aishwarya     0 Apr  6 09:08 file
+drwxrwxr-x 2 aishwarya aishwarya  4096 Apr  6 08:25 include
+-rw-rw-r-- 1 aishwarya aishwarya  1073 Apr  5 21:23 LICENSE
+-rw-rw-r-- 1 aishwarya aishwarya   277 Apr  5 21:23 makefile
+-rw-rw-r-- 1 aishwarya aishwarya    50 Apr  5 21:23 README.md
+-rwxrwxr-x 1 aishwarya aishwarya 47040 Apr  6 09:07 shell
+drwxrwxr-x 2 aishwarya aishwarya  4096 Apr  6 09:07 src

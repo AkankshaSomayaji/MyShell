@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <termios.h> 
+#include <glob.h>
 #include "cmdtable.h"
 
 /* --------------------------- Global Variables -------------------------- */

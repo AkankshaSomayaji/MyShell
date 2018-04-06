@@ -4,12 +4,43 @@
 #include "../include/tokens.h"
 #include "../include/cmdtable.h"
 
+
 /* ------------------------ Function Definitions ------------------------ */
 
 void execute(int num){
 
-		int i = num - 1;
+		int i = num - 1, j =0;
 
+
+		for(j=0;j<cmd_table[i].num_tokens;j++)
+		{
+			glob_t glob_buf;
+			int glob_ct = 0;
+			if(strchr(cmd_table[i].cmdtkns[j],'*') !=NULL || strchr(cmd_table[i].cmdtkns[j],'?')!=NULL)
+			{
+				char *temp = malloc(sizeof(char *)*strlen(cmd_table[i].cmdtkns[j]));
+				strcpy(temp,cmd_table[i].cmdtkns[j]);
+				free(cmd_table[i].cmdtkns[j]);
+				cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens-1));
+				cmd_table[i].num_tokens= cmd_table[i].num_tokens-1;
+				glob(temp,0,NULL,&glob_buf);
+				glob_ct = glob_buf.gl_pathc;
+				printf(" it %s",temp);
+				for(int k =0; k <glob_ct;k++)
+				{
+					cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens+1));
+					cmd_table[i].cmdtkns[cmd_table[i].num_tokens] = (char *)malloc(sizeof(char *)*strlen(glob_buf.gl_pathv[k])+1);
+					/*temp = strcat(temp,glob_buf.gl_pathv[k]);
+					if(k!=glob_ct-1)
+						temp = strcat(temp," ");
+					cmd_table[i].cmdtkns[j] = (char *)realloc(cmd_table[i].cmdtkns[j],strlen(temp)+1);*/
+					strcpy(cmd_table[i].cmdtkns[cmd_table[i].num_tokens],glob_buf.gl_pathv[k]);
+					cmd_table[i].num_tokens += 1;
+				}
+			}
+		}
+				
+		//print_cmdtable();
 		cmd_table[i].cmdtkns = (char **)realloc(cmd_table[i].cmdtkns,sizeof(char *)*(cmd_table[i].num_tokens+1));
 		cmd_table[i].cmdtkns[cmd_table[i].num_tokens] = NULL;
 
