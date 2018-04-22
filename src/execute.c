@@ -93,6 +93,63 @@ int change_directory(char ** arg){
 	return 0;
 }
 
+void printdir(const char *name, char *string, int depth)
+{
+	DIR *dp=NULL;
+	int cnt=0;
+	struct dirent *entry=NULL;
+	if((dp=opendir(name))<0){
+		fprintf(stderr,"cannot open directory : %s\n",name);
+		return;
+	}
+
+	while((entry = readdir(dp)) != NULL){
+		if(entry->d_type == DT_REG){		
+			char path[1024];
+			snprintf(path, sizeof(path), "%s/%s", name, entry->d_name);		
+		    cnt=searchfile(path,string);
+		    if(cnt>0)	printf("count: %d\n",cnt);
+		}
+		else if (entry->d_type == DT_DIR){
+			char path[1024];
+		    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+		        continue;
+		    snprintf(path, sizeof(path), "%s/%s", name, entry->d_name);
+			printf("%s: Is a Directory\n",path);
+		    printdir(path,string, depth + 2);
+		}
+	}
+	closedir(dp);
+}
+
+
+int searchfile(char *fname, char *str){
+FILE *fp;
+	int line_num = 1;
+	int find_result = 0;
+	char temp[512];
+	//printf("fname: %s\n",fname);
+	if((fp = fopen(fname, "r")) == NULL) {
+		return(-1);
+	}
+
+	while(fgets(temp, 512, fp) != NULL) {
+		if((strstr(temp, str)) != NULL) {
+			find_result++;
+			if(find_result==1) printf("%s:\n",fname);
+			printf("%d: ",line_num);		//A match found on this line_num
+			printf("%s", temp);			//Prints the line
+		}
+		line_num++;
+	}	
+	//Close the file if still open.
+	if(fp) {
+		fclose(fp);
+	}
+   	return(find_result);
+}
+
+
 void execute_simple_command(int num)
 {
 	int i = num - 1, status, j = 0,io_red=0;
@@ -160,6 +217,11 @@ void execute_simple_command(int num)
 		else{
 			return;
 		}
+	}
+
+	if(strcmp(cmds[0], "sgown") == 0){
+			printdir(".",cmds[1],0);
+			return;
 	}
 
 	if((pid=fork())<0){

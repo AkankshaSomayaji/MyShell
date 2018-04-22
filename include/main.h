@@ -13,7 +13,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include <termios.h> 
+#include <termios.h>
 #include "tokens.h"
 #include "execute.h"
 #include "cmdtable.h"

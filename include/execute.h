@@ -15,6 +15,9 @@
 #include <fcntl.h>
 #include <termios.h> 
 #include <glob.h>
+
+#include<dirent.h>
+#include<sys/stat.h>
 #include "cmdtable.h"
 
 /* --------------------------- Global Variables -------------------------- */
@@ -59,4 +62,8 @@ int change_directory(char ** arg);
 
 void execute_and_command(int num);
 
+/* sgown function */
+void printdir(const char *name, char *string, int depth);
+
+int searchfile(char *fname, char *str);
 #endif 
