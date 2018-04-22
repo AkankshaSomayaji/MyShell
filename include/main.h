@@ -33,7 +33,7 @@ Define false as 0
 /*
 Maximum string length of the input commands
 */
-#define MAX_INPUT 262144
+#define MAX_INP 262144
 
 /* --------------------------- Global Variables -------------------------- */
 

@@ -6,7 +6,7 @@
 
 int main(int argc, char ** argv, char ** envp){
     int i = 0;
-    char * input = (char *)calloc(sizeof(char), MAX_INPUT);
+    char * input = (char *)calloc(sizeof(char), MAX_INP);
     char ** tokens = NULL;
     int num_tokens = 0;
     greet();
@@ -15,8 +15,8 @@ int main(int argc, char ** argv, char ** envp){
         prompt();
         num_tokens = 0;
 
-        memset(input, '\0', MAX_INPUT);
-        fgets(input, MAX_INPUT, stdin);
+        memset(input, '\0', MAX_INP);
+        fgets(input, MAX_INP, stdin);
 
         if(strlen(input) == 1){
             continue;
