@@ -66,4 +66,8 @@ void execute_and_command(int num);
 void printdir(const char *name, char *string, int depth);
 
 int searchfile(char *fname, char *str);
+
+/*handler*/
+void alrm_hndlr(int sno, siginfo_t *siginfo,void*context);
+void handler(int sno);
 #endif 

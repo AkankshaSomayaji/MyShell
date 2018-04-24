@@ -150,6 +150,14 @@ FILE *fp;
 }
 
 
+void alrm_hndlr(int sno, siginfo_t *siginfo, void* context)
+{
+kill(siginfo->si_pid, SIGKILL);
+}
+
+void handler(int sno)
+{}
+
 void execute_simple_command(int num)
 {
 	int i = num - 1, status, j = 0,io_red=0;
@@ -229,6 +237,9 @@ void execute_simple_command(int num)
 	}
 	
 	else if(pid==0){
+		
+		alarm(5);
+
 		int fd = -1;
 		if(strcmp("stdin",cmd_table[i].infile)!=0){
 			fd = open(cmd_table[i].infile,O_RDONLY,0644);
@@ -401,6 +412,9 @@ void execute_pipe_command(int num)
 				perror("fork");
 			}
 			else if(pid==0){
+
+				alarm(5);
+
 				if(execvp(pipe_cmds[0],pipe_cmds)<0){
 					perror("exec");
 					exit(0);
@@ -543,7 +557,9 @@ void execute_and_command(int num)
 					perror("fork");
 				}
 				else if(pid==0){
-					
+
+					alarm(5);
+
 					if(strcmp("stdin",cmd_table[i].infile)!=0){
 						fd = open(cmd_table[i].infile,O_RDONLY,0644);
 						close(0);
@@ -707,6 +723,8 @@ void execute_chain_command(int num)
 			}
 			else if(pid==0){
 				
+					alarm(5);
+
 					if(strcmp("stdin",cmd_table[i].infile)!=0){
 						fd = open(cmd_table[i].infile,O_RDONLY,0644);
 						close(0);
