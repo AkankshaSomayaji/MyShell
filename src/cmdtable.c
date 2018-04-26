@@ -115,6 +115,9 @@ void update_history(){
 	char * home_dir = NULL;
 	char * path = NULL;
 
+	struct tm * newtime;
+	time_t aclock;
+
 	home_dir = getenv("HOME"); 
 	path = (char *)calloc(sizeof(char),  (strlen(home_dir) + 2 + strlen("myshell_history")));
 
@@ -131,9 +134,9 @@ void update_history(){
 		for(j = 0; j < no_cmd; j++){
 
 			for(i = 0; i < cmd_table[j].num_tokens; i++){
-
+				
 				write_ret = write(fd, cmd_table[j].cmdtkns[i], strlen(cmd_table[j].cmdtkns[i]));
-
+			
 				if(write_ret < 0){
 					perror("Write error [token]!");
 				}
@@ -144,7 +147,12 @@ void update_history(){
 				}
         
 			}
+			write_ret = write(fd, " ", 1);
 
+			time(&aclock);                 
+   			newtime = localtime(&aclock);  
+			write_ret = write(fd, asctime(newtime), strlen(asctime(newtime)));
+			
 			write_ret = write(fd, "\n", 1);
 			if(write_ret < 0){
 				perror("Write error [delimiter - newline]!");

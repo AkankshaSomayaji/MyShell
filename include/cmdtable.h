@@ -14,7 +14,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <termios.h> 
-
+#include <time.h>
 /* --------------------------- Global Variables -------------------------- */
 
 /*
