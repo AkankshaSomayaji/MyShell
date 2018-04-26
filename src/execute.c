@@ -263,6 +263,8 @@ void execute_simple_command(int num)
 	if(strcmp(cmds[0], "cd") == 0){
 		int ret = 0;
 		ret = change_directory(cmds);
+		getcwd(cwd,1024);
+		//printf("\ncwd:%s",cwd);
 		if(ret < 0){
 			perror("cd");
 		}
@@ -296,7 +298,7 @@ void execute_simple_command(int num)
 
 
 	if(strcmp(cmds[0], "tree") == 0){
-			char cwd[1024];
+			//char cwd[1024];
 			getcwd(cwd,1024);
 			//printf("\ncwd:%s",cwd);
 			tree(cwd,0);
@@ -634,6 +636,7 @@ void execute_and_command(int num)
 				if(strcmp(cmds[0], "cd") == 0){
 				int ret = 0;
 				ret = change_directory(cmds);
+				getcwd(cwd,1024);
 					if(ret < 0){
 						perror("cd");
 					}
@@ -647,7 +650,7 @@ void execute_and_command(int num)
 					}
 				}
 				if(strcmp(cmds[0], "tree") == 0){
-					char cwd[1024];
+					//char cwd[1024];
 					getcwd(cwd,1024);
 					//printf("\ncwd:%s",cwd);
 					tree(cwd,0);
@@ -807,6 +810,7 @@ void execute_chain_command(int num)
 			if(strcmp(cmds[0], "cd") == 0){
 				int ret = 0;
 				ret = change_directory(cmds);
+				getcwd(cwd,1024);
 					if(ret < 0){
 						perror("cd");
 					}
@@ -820,7 +824,7 @@ void execute_chain_command(int num)
 					}
 			}
 			if(strcmp(cmds[0], "tree") == 0){
-					char cwd[1024];
+					//char cwd[1024];
 					getcwd(cwd,1024);
 					//printf("\ncwd:%s",cwd);
 					tree(cwd,0);

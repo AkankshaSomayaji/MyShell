@@ -26,7 +26,7 @@
 global command table 
 */
 extern struct command_table cmd_table[25];
-
+char cwd[1024];
 /* --------------------------- Function Headers -------------------------- */
 
 /*
