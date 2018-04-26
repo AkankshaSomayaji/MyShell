@@ -5,6 +5,7 @@
 #include "../include/cmdtable.h"
 
 
+
 /* ------------------------ Function Definitions ------------------------ */
 
 void execute(int num){
@@ -123,8 +124,51 @@ void printdir(const char *name, char *string, int depth)
 }
 
 
+void tree(char * my_name, int spaces)
+{
+	char * name = (char *)malloc(sizeof(char)* (strlen(my_name) + 1));
+	strcpy(name,my_name);
+	DIR *dp = NULL;
+	if((dp=opendir(name))<0){
+		fprintf(stderr,"cannot open directory : %s\n",name);
+		return;
+	}
+	struct dirent * rd;
+	rd=readdir(dp);
+	if(rd==NULL)
+		perror("readdir");
+	//struct stat sb;
+	
+	while(rd!=NULL)
+	{
+		if(rd->d_type == DT_DIR && strcmp(rd->d_name,".")!=0 && strcmp(rd->d_name,"..")!=0 )
+		{
+			for(int j = 0; j< spaces; j++)
+				printf("\t");
+			printf("[%s]\n",rd->d_name);
+			char * temp = (char *)malloc(sizeof(char)* (strlen(my_name) + 1));
+			strcpy(temp,name);
+			name = (char *)realloc(name,sizeof(char) *(strlen(name)+2));
+			name = strcat(name,"/");
+			name = (char *)realloc(name,sizeof(char) *(strlen(name)+strlen(rd->d_name)+1));
+			name = strcat(name,rd->d_name);
+			tree(name , spaces + 1);
+			name = (char *)realloc(name,sizeof(char) *(strlen(temp)+1));
+			strcpy(name,temp);
+		}
+		else if(strcmp(rd->d_name,".")!=0 && strcmp(rd->d_name,"..")!=0)
+		{
+			for(int j = 0; j< spaces; j++)
+				printf("\t");
+			printf("%s\n",rd->d_name);
+		}
+		rd=readdir(dp);
+	}
+
+}
+
 int searchfile(char *fname, char *str){
-FILE *fp;
+	FILE *fp;
 	int line_num = 1;
 	int find_result = 0;
 	char temp[512];
@@ -231,6 +275,16 @@ void execute_simple_command(int num)
 			printdir(".",cmds[1],0);
 			return;
 	}
+
+
+	if(strcmp(cmds[0], "tree") == 0){
+			char cwd[1024];
+			getcwd(cwd,1024);
+			//printf("\ncwd:%s",cwd);
+			tree(cwd,0);
+			return;
+	}
+
 
 	if((pid=fork())<0){
 		perror("fork");
@@ -552,6 +606,14 @@ void execute_and_command(int num)
 						continue;
 					}
 				}
+				if(strcmp(cmds[0], "tree") == 0){
+					char cwd[1024];
+					getcwd(cwd,1024);
+					//printf("\ncwd:%s",cwd);
+					tree(cwd,0);
+					continue;
+				}
+	
 				int fd = -1;
 				if((pid=fork())<0){
 					perror("fork");
@@ -717,6 +779,14 @@ void execute_chain_command(int num)
 						continue;
 					}
 			}
+			if(strcmp(cmds[0], "tree") == 0){
+					char cwd[1024];
+					getcwd(cwd,1024);
+					//printf("\ncwd:%s",cwd);
+					tree(cwd,0);
+					continue;
+			}
+
 			int fd = -1;
 			if((pid=fork())<0){
 				perror("fork");

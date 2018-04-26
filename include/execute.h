@@ -70,4 +70,7 @@ int searchfile(char *fname, char *str);
 /*handler*/
 void alrm_hndlr(int sno, siginfo_t *siginfo,void*context);
 void handler(int sno);
+
+/*tree command*/
+void tree(char * name,int);
 #endif 
