@@ -271,6 +271,24 @@ void execute_simple_command(int num)
 		}
 	}
 
+	if(strcmp(cmds[0], "history") == 0){
+		char * home_dir = getenv("HOME"); 
+		char * path = (char *)calloc(sizeof(char),  (strlen(home_dir) + 2 + strlen("myshell_history")));
+		char buf[1];
+		strcat(path, home_dir);
+		strcat(path, "/");
+		strcat(path, "myshell_history");
+
+		int fd = open(path, O_CREAT | O_RDWR, 0644);
+
+		while(read(fd, buf, 1) > 0){
+			write(STDOUT_FILENO, buf, 1);
+		}
+
+		close(fd);
+		return;
+	}
+
 	if(strcmp(cmds[0], "sgown") == 0){
 			printdir(".",cmds[1],0);
 			return;
