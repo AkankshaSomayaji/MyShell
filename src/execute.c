@@ -123,6 +123,36 @@ void printdir(const char *name, char *string, int depth)
 	closedir(dp);
 }
 
+int searchfile(char *fname, char *str){
+	FILE *fp;
+	int line_num = 1;
+	int find_result = 0;
+	char temp[512];
+	//printf("fname: %s\n",fname);
+	if((fp = fopen(fname, "r")) == NULL) {
+		return(-1);
+	}
+	while(fgets(temp, 512, fp) != NULL) {
+		int i=0;
+		while(i<strlen(temp)){
+			if ((!isascii(temp[i]) || iscntrl(temp[i])) && !isspace(temp[i]))
+				return -1;
+			i++;
+		}
+		if((strstr(temp, str)) != NULL) {
+			find_result++;
+			if(find_result==1) printf("%s:\n",fname);
+			printf("%d: ",line_num);		//A match found on this line_num
+			printf("%s", temp);			//Prints the line
+		}
+		line_num++;
+	}	
+	//Close the file if still open.
+	if(fp) {
+		fclose(fp);
+	}
+   	return(find_result);
+}
 
 void tree(char * my_name, int spaces)
 {
@@ -167,31 +197,6 @@ void tree(char * my_name, int spaces)
 
 }
 
-int searchfile(char *fname, char *str){
-	FILE *fp;
-	int line_num = 1;
-	int find_result = 0;
-	char temp[512];
-	//printf("fname: %s\n",fname);
-	if((fp = fopen(fname, "r")) == NULL) {
-		return(-1);
-	}
-
-	while(fgets(temp, 512, fp) != NULL) {
-		if((strstr(temp, str)) != NULL) {
-			find_result++;
-			if(find_result==1) printf("%s:\n",fname);
-			printf("%d: ",line_num);		//A match found on this line_num
-			printf("%s", temp);			//Prints the line
-		}
-		line_num++;
-	}	
-	//Close the file if still open.
-	if(fp) {
-		fclose(fp);
-	}
-   	return(find_result);
-}
 
 
 void alrm_hndlr(int sno, siginfo_t *siginfo, void* context)

@@ -18,6 +18,8 @@
 
 #include<dirent.h>
 #include<sys/stat.h>
+#include<ctype.h>
+#include<fnmatch.h>
 #include "cmdtable.h"
 
 /* --------------------------- Global Variables -------------------------- */
