@@ -351,6 +351,7 @@ void execute_simple_command(int num)
 void execute_pipe_command(int num)
 {
 	//printf("\npipe command\n");
+	//printf("\nhelllo\n");
 	int i = num - 1, status,io_red=0;
 	pid_t pid;
 	int ct = 0;
@@ -422,6 +423,8 @@ void execute_pipe_command(int num)
 		fdin = dup(tmpin);
 	}
 	int fdout;
+	int no_history;
+	no_history = 0;
 	for(j = 0; j < ct; j++)
 	{
 		set = 0;
@@ -486,8 +489,27 @@ void execute_pipe_command(int num)
 			else if(pid==0){
 
 				alarm(5);
+				if(strcmp(cmds[0], "history") == 0 && no_history == 0){
+					//printf("\nhelllo\n");
+					char * home_dir = getenv("HOME"); 
+					char * path = (char *)calloc(sizeof(char),  (strlen(home_dir) + 2 + strlen("myshell_history")));
+					char buf[1];
+					strcat(path, home_dir);
+					strcat(path, "/");
+					strcat(path, "myshell_history");
 
-				if(execvp(pipe_cmds[0],pipe_cmds)<0){
+					int fd = open(path, O_CREAT | O_RDWR, 0644);
+
+					while(read(fd, buf, 1) > 0){
+						write(STDOUT_FILENO, buf, 1);
+					}
+
+					close(fd);
+					no_history = 1;
+					//return;
+					exit(0);
+				}
+				else if(execvp(pipe_cmds[0],pipe_cmds)<0){
 					perror("exec");
 					exit(0);
 				}
