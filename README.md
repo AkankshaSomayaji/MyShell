@@ -38,6 +38,21 @@ A minimalistic Linux Shell
 
    Allows a user to set the maximum time for which a command is allowed to run.
 
+## Usage
+
+Clone this repo
+
+```
+$ git clone https://github.com/AkankshaSomayaji/MyShell
+```
+
+Cd into the folder and simple type make
+
+```
+$ cd MyShell
+$ make
+```
+
 ## License
 
 This project is made available under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
