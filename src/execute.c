@@ -317,7 +317,7 @@ void execute_simple_command(int num)
 	
 	else if(pid==0){
 		
-		alarm(5);
+		//alarm(5);
 
 		int fd = -1;
 		if(strcmp("stdin",cmd_table[i].infile)!=0){
@@ -495,7 +495,7 @@ void execute_pipe_command(int num)
 			}
 			else if(pid==0){
 
-				alarm(5);
+				//alarm(5);
 				if(strcmp(cmds[0], "history") == 0 && no_history == 0){
 					//printf("\nhelllo\n");
 					char * home_dir = getenv("HOME"); 
@@ -668,7 +668,7 @@ void execute_and_command(int num)
 				}
 				else if(pid==0){
 
-					alarm(5);
+					//alarm(5);
 
 					if(strcmp("stdin",cmd_table[i].infile)!=0){
 						fd = open(cmd_table[i].infile,O_RDONLY,0644);
@@ -842,7 +842,7 @@ void execute_chain_command(int num)
 			}
 			else if(pid==0){
 				
-					alarm(5);
+					//alarm(5);
 
 					if(strcmp("stdin",cmd_table[i].infile)!=0){
 						fd = open(cmd_table[i].infile,O_RDONLY,0644);
